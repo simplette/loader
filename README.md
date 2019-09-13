@@ -84,5 +84,23 @@ Then you can use it in your latte templates like this:
 <script n:script="admin-sb"></script>
 ```
 
+
+Contributing
+------------
+
+This is an open source, community-driven project. If you would like to contribute, please follow 
+the code format as used in current sources and submit a pull request.
+
+
+-----
+
+Advanced documentation will be added in the future. But if you look on my source codes, you will understand what you 
+can do with this small (but powerful) library.
+
+See also [other libraries][3] and some [older work][4] if you are looking for inspiration.
+
+
 [1]: https://github.com/nette/nette
 [2]: https://github.com/simplette/loader
+[3]: https://github.com/simplette
+[4]: https://github.com/sw2eu
