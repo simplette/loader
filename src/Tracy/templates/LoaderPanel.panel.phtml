@@ -1,0 +1,85 @@
+<?php
+
+namespace Simplette\Loader\Tracy;
+
+use Latte\Runtime\Filters;
+use Nette;
+use Tracy\Helpers;
+
+?>
+<style class="tracy-debug">
+
+	#tracy-debug .sw2-LoadPanel .tracy-inner {
+		min-width: 700px;
+	}
+
+	#tracy-debug .sw2-LoadPanel table {
+		width: 100%;
+		white-space: nowrap;
+	}
+
+	#tracy-debug .sw2-LoadPanel .green {
+		color: green;
+		font-weight: bold;
+	}
+
+	#tracy-debug .sw2-LoadPanel .red {
+		color: red;
+		font-weight: bold;
+	}
+
+</style>
+
+<h1>Compiled <?php echo $this->filesCount ?> file<?php echo $this->filesCount !== 1 ? 's' : '' ?></h1>
+
+<div class="tracy-inner sw2-LoadPanel">
+	<div class="tracy-inner-container">
+
+
+	<div class="tracy-inner">
+		<table class="tracy-sortable">
+			<?php foreach ($this->loaders as $category => $compilers): ?>
+				<?php $rendered = FALSE ?>
+				<?php foreach ($compilers as $compiler): ?>
+					<?php foreach ($compiler->getStatistics() as $name => $statistics): ?>
+						<?php if (!$rendered): ?>
+							<tr>
+								<th><?php echo ucfirst($category) ?> files</th>
+								<th>Source file</th>
+								<th>Last change</th>
+								<th>Took</th>
+								<th>Size</th>
+							</tr>
+							<?php $rendered = TRUE; endif ?>
+						<tr>
+							<td title="<?php echo htmlSpecialChars($statistics['path']) ?>"><?php echo htmlSpecialChars($name) ?></td>
+							<td>
+								<?php if (is_array($statistics['file'])): ?>
+									<span class="tracy-toggle tracy-collapsed">
+					<span class="tracy-dump"><?php echo count($statistics['file']) ?> files</span>
+				</span>
+									<div class="tracy-collapsed">
+										<?php foreach ($statistics['file'] as $file): ?>
+											<?php echo Helpers::editorLink($file) ?><br>
+										<?php endforeach ?>
+									</div>
+								<?php else: ?>
+									<?php echo Helpers::editorLink($statistics['file']) ?>
+								<?php endif ?>
+							</td>
+							<td><?php echo Filters::date($statistics['date'], 'Y-m-d H:i:s') ?></td>
+							<td class="<?php echo empty($statistics['time']) ? 'green' : 'red'?>">
+								<?php if (empty($statistics['time'])): ?>
+									<?php echo 'cached' ?>
+								<?php else: $time = $statistics['time'] ?>
+									<?php echo $time > 1.0 ? sprintf('%.2fs', $time) : sprintf('%.1fms', $time * 1000) ?>
+								<?php endif ?>
+							</td>
+							<td><?php echo Filters::bytes($statistics['size']) ?></td>
+						</tr>
+					<?php endforeach ?>
+				<?php endforeach ?>
+			<?php endforeach ?>
+		</table>
+	</div>
+</div>
